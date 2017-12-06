@@ -52,8 +52,14 @@ public class CSVReader {
         			if(!processingQueue.isEmpty()){
         				
         				processingQueue.first().setTimeOrder(processingQueue.first().getTimeOrder() - 1);
-        				processingQueue.enqueue(processingQueue.dequeue());
+        				if(processingQueue.first().getTimeOrder() == 0){
+        					terminatedJobs.add(processingQueue.dequeue());
+        				}
+    
+        				else
+        					processingQueue.enqueue(processingQueue.dequeue());
         				
+        			
         				int size = processingQueue.size() - 1;
         				for(int j = 0; j < size; j++){
         					processingQueue.first().setPatienceLevel(processingQueue.first().getPatienceLevel() - 1);
@@ -63,13 +69,6 @@ public class CSVReader {
         						processingQueue.enqueue(processingQueue.dequeue());
         				}
         				
-        				if(processingQueue.first().getTimeOrder() == 0){
-        					terminatedJobs.add(processingQueue.dequeue());
-        				}
-    
-        				else{
-        					processingQueue.enqueue(processingQueue.dequeue());
-        				}
         			}
         			
         			while(!inputQueue.isEmpty() && inputQueue.first().getMomentArrival() == timeUnit){
