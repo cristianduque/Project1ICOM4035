@@ -49,6 +49,7 @@ public class CSVReader {
         		//METHOD
         		int timeUnit = 0;
         		while(!inputQueue.isEmpty() || !processingQueue.isEmpty()){
+        			int size = processingQueue.size() - 1;
         			if(!processingQueue.isEmpty()){
         				
         				processingQueue.first().setTimeOrder(processingQueue.first().getTimeOrder() - 1);
@@ -60,7 +61,7 @@ public class CSVReader {
         					processingQueue.enqueue(processingQueue.dequeue());
         				
         			
-        				int size = processingQueue.size() - 1;
+        				//int size = processingQueue.size() - 1;
         				for(int j = 0; j < size; j++){
         					processingQueue.first().setPatienceLevel(processingQueue.first().getPatienceLevel() - 1);
         					if(processingQueue.first().getPatienceLevel() == 0)
@@ -78,7 +79,8 @@ public class CSVReader {
         			timeUnit++;
         		}
     
-        		System.out.println(cancelJobs.size());
+        		System.out.println(cancelJobs.get(0).getCustomerID());
+        		
         		
         	    
         } catch (FileNotFoundException e) {
