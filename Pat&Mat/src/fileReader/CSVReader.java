@@ -54,14 +54,13 @@ public class CSVReader {
         				processingQueue.first().setTimeOrder(processingQueue.first().getTimeOrder() - 1);
         				processingQueue.enqueue(processingQueue.dequeue());
         				
-        				Node<ClientOrder> curr = processingQueue.firstNode().getNext();
-        				for(int j = 0; j < processingQueue.size() - 1; j++){
-        					curr.getElement().setPatienceLevel(curr.getElement().getPatienceLevel() - 1);
-        					if(curr.getElement().getPatienceLevel() == 0)
+        				int size = processingQueue.size() - 1;
+        				for(int j = 0; j < size; j++){
+        					processingQueue.first().setPatienceLevel(processingQueue.first().getPatienceLevel() - 1);
+        					if(processingQueue.first().getPatienceLevel() == 0)
         						cancelJobs.add(processingQueue.dequeue());
         					else
         						processingQueue.enqueue(processingQueue.dequeue());
-        					curr = curr.getNext();
         				}
         				
         				if(processingQueue.first().getTimeOrder() == 0){
