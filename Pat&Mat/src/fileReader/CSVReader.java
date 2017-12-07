@@ -1,15 +1,14 @@
 package fileReader;
 
 import classes.ClientOrder;
-import classes.SLLQueue;
-import classes.Node;
+import classes.FCFS;
+import classes.LCFS;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 
 
@@ -24,11 +23,9 @@ public class CSVReader {
         BufferedReader br = null;
         String line = "";
         String csvSplitBy = ",";
-        SLLQueue<ClientOrder> inputQueue = new SLLQueue<ClientOrder>();
-        SLLQueue<ClientOrder> processingQueue = new SLLQueue<ClientOrder>();
-        SLLQueue<ClientOrder> temp = new SLLQueue<ClientOrder>();
-        List<ClientOrder> terminatedJobs = new ArrayList<ClientOrder>();
-        List<ClientOrder> cancelJobs = new ArrayList<ClientOrder>();
+        FCFS patMethod = new FCFS();
+        LCFS matMethod = new LCFS();
+        
         
         try {
         		br = new BufferedReader(new FileReader(csvFile));
@@ -41,47 +38,21 @@ public class CSVReader {
         			double costOrder = Double.parseDouble(process[3].substring(1));
         			int patience = Integer.parseInt(process[4]);
         			
-        			ClientOrder client = new ClientOrder(arTime, custID, timePrep, costOrder, patience);
+        			ClientOrder client1 = new ClientOrder(arTime, custID, timePrep, costOrder, patience);
+        			ClientOrder client2 = new ClientOrder(arTime, custID, timePrep, costOrder, patience);
+
+        			patMethod.fillingInputQueue(client1);
+        			matMethod.fillingInputStack(client2);
         			
-        			inputQueue.enqueue(client);
+
         		}
         		
         		//METHOD
-        		int timeUnit = 0;
-        		while(!inputQueue.isEmpty() || !processingQueue.isEmpty()){
-        			int size = processingQueue.size() - 1;
-        			if(!processingQueue.isEmpty()){
-        				
-        				processingQueue.first().setTimeOrder(processingQueue.first().getTimeOrder() - 1);
-        				if(processingQueue.first().getTimeOrder() == 0){
-        					terminatedJobs.add(processingQueue.dequeue());
-        				}
-    
-        				else
-        					processingQueue.enqueue(processingQueue.dequeue());
-        				
-        			
-        				//int size = processingQueue.size() - 1;
-        				for(int j = 0; j < size; j++){
-        					processingQueue.first().setPatienceLevel(processingQueue.first().getPatienceLevel() - 1);
-        					if(processingQueue.first().getPatienceLevel() == 0)
-        						cancelJobs.add(processingQueue.dequeue());
-        					else
-        						processingQueue.enqueue(processingQueue.dequeue());
-        				}
-        				
-        			}
-        			
-        			while(!inputQueue.isEmpty() && inputQueue.first().getMomentArrival() == timeUnit){
-        				processingQueue.enqueue(inputQueue.dequeue());
-        				
-        			}
-        			timeUnit++;
-        		}
-    
-        		System.out.println(cancelJobs.get(0).getCustomerID());
+        		patMethod.methodFCFS();
+        		matMethod.methodLCFS(); 
         		
         		
+            	
         	    
         } catch (FileNotFoundException e) {
         		e.printStackTrace();
