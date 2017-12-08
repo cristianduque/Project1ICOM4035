@@ -43,8 +43,7 @@ public class CSVReader {
 
         			patMethod.fillingInputQueue(client1);
         			matMethod.fillingInputStack(client2);
-        			
-
+        		
         		}
         		
         		//METHOD

@@ -4,63 +4,64 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LCFS {
-	SLLQueue<ClientOrder> inputStack;
-	SLLStack<ClientOrder> processingStack;
-	SLLStack<ClientOrder> temporaryStack;
-	List<ClientOrder> terminatedJobs;
-    List<ClientOrder> cancelJobs;
+	private SLLStack<ClientOrder> inputStack = new SLLStack<ClientOrder>();
+    private SLLStack<ClientOrder> processingStack = new SLLStack<ClientOrder>();
+    private SLLStack<ClientOrder> processingStack1 = new SLLStack<ClientOrder>();
+    private SLLStack<ClientOrder> processingStack2 = new SLLStack<ClientOrder>();
+    private SLLStack<ClientOrder> processingStack3 = new SLLStack<ClientOrder>();
+    private List<ClientOrder> terminatedJobs = new ArrayList<ClientOrder>();
+    private List<ClientOrder> cancelJobs = new ArrayList<ClientOrder>();
     
     public LCFS(){
-    	inputStack = new SLLQueue<ClientOrder>();
+    	inputStack = new SLLStack<ClientOrder>();
 		processingStack = new SLLStack<ClientOrder>();
+		processingStack1 = new SLLStack<ClientOrder>();
+		processingStack2 = new SLLStack<ClientOrder>();
+		processingStack3 = new SLLStack<ClientOrder>();
+
 		terminatedJobs = new ArrayList<ClientOrder>();
 		cancelJobs = new ArrayList<ClientOrder>();
-		temporaryStack = new SLLStack<ClientOrder>();
+		
     }
     
     public void fillingInputStack(ClientOrder proc){
-    	inputStack.enqueue(proc);
+    	inputStack.push(proc);
     }
     
     public void methodLCFS(){
-    	int timeUnit = 0;
-    	ClientOrder serviceClient = null;
-		while(!inputStack.isEmpty() || !processingStack.isEmpty()){
-			int size = processingStack.size() - 1;
-			if(!processingStack.isEmpty()){
-				processingStack.top().setTimeOrder(processingStack.top().getTimeOrder() - 1);
-				if(processingStack.top().getTimeOrder() == 0){
-					terminatedJobs.add(processingStack.pop());
-				}
-				else
-					serviceClient = processingStack.pop();
-				
-				for(int j = 0; j < size; j++){
-					processingStack.top().setPatienceLevel(processingStack.top().getPatienceLevel() - 1);
-					if(processingStack.top().getPatienceLevel() == 0)
-						cancelJobs.add(processingStack.pop());
-					else
-						temporaryStack.push(processingStack.pop());
-				}
-				
-				for(int i = 0; i < size; i++){
-					processingStack.push(temporaryStack.pop());
-				}
-				
-				processingStack.push(serviceClient);
+    	int pL = 0;
+		double profit = 0.0;
+		while(!inputStack.isEmpty()) {
+			processingStack.push(inputStack.pop());
+		}
+		
+		processingStack1.push(processingStack.pop());
+		
+		while(!processingStack.isEmpty()) {
+			if(processingStack.top().getMomentArrival() < processingStack1.top().getTimeOrder()) {
+				processingStack2.push(processingStack.pop());
+			} else {
+				processingStack3.push(processingStack.pop());
 			}
-			
-			while(!inputStack.isEmpty() && inputStack.first().getMomentArrival() == timeUnit){
-				if(processingStack.isEmpty())
-					processingStack.push(inputStack.dequeue());
-				else{
-					ClientOrder tempTop = processingStack.pop();
-					processingStack.push(inputStack.dequeue());
-					processingStack.push(tempTop);
-				}
-					
+		}
+		while(!processingStack2.isEmpty()) {
+			processingStack1.push(processingStack2.pop());
+		}
+		while(!processingStack3.isEmpty()) {
+			processingStack1.push(processingStack3.pop());
+		}
+		while(!processingStack1.isEmpty()) {
+			processingStack.push(processingStack1.pop());
+		}
+	    
+		while(!processingStack.isEmpty()) {
+			if (processingStack.top().getPatienceLevel() > pL) {
+				pL = pL + processingStack.top().getTimeOrder();
+				profit = profit + processingStack.top().getCost();
+				terminatedJobs.add(processingStack.pop());
+			} else {
+				cancelJobs.add(processingStack.pop());
 			}
-			timeUnit++;
 		}
 		
 		System.out.println("Mat's approach profit: $" + computingProfit(terminatedJobs));
