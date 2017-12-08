@@ -70,9 +70,10 @@ public class ShortestJob {
 	
 	public void sortJobs(SLLQueue<ClientOrder> q){
 		int n = q.size();
-		for(int i = 0; i < n; i++){
+		ClientOrder servingFirst = q.dequeue();
+		for(int i = 0; i < n-1; i++){
 			ClientOrder x = q.dequeue();
-			for(int j = 0; j < n - 1; j++){
+			for(int j = 0; j < n - 2; j++){
 				ClientOrder y = q.dequeue();
 				if(x.getTimeOrder() > y.getTimeOrder())
 					q.enqueue(y);
@@ -83,6 +84,11 @@ public class ShortestJob {
 			}
 			
 			q.enqueue(x);
+		}
+		
+		q.enqueue(servingFirst);
+		for(int k = 0; k < n-1; k++){
+			q.enqueue(q.dequeue());
 		}
 	}
 }
