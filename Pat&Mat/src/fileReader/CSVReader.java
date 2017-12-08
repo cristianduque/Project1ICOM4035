@@ -3,6 +3,8 @@ package fileReader;
 import classes.ClientOrder;
 import classes.FCFS;
 import classes.LCFS;
+import classes.MaxProfit;
+import classes.ShortestJob;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -25,6 +27,8 @@ public class CSVReader {
         String csvSplitBy = ",";
         FCFS patMethod = new FCFS();
         LCFS matMethod = new LCFS();
+        MaxProfit maxMethod = new MaxProfit();
+        ShortestJob pacMethod = new ShortestJob();
         
         
         try {
@@ -40,15 +44,23 @@ public class CSVReader {
         			
         			ClientOrder client1 = new ClientOrder(arTime, custID, timePrep, costOrder, patience);
         			ClientOrder client2 = new ClientOrder(arTime, custID, timePrep, costOrder, patience);
+        			ClientOrder client3 = new ClientOrder(arTime, custID, timePrep, costOrder, patience);
+        			ClientOrder client4 = new ClientOrder(arTime, custID, timePrep, costOrder, patience);
+
 
         			patMethod.fillingInputQueue(client1);
         			matMethod.fillingInputStack(client2);
+        			maxMethod.fillingInputQueue(client3);
+        			pacMethod.fillingInputQueue(client4);
         		
         		}
         		
         		//METHOD
         		patMethod.methodFCFS();
         		matMethod.methodLCFS(); 
+        		maxMethod.methodMaxProfit();
+        		pacMethod.methodShortestJob();
+        		
         		
         		
             	
