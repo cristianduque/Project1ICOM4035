@@ -1,4 +1,4 @@
-package classes;
+package exceptions;
 
 public class EmptyStackException extends RuntimeException {
 

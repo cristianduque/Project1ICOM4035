@@ -1,4 +1,4 @@
-package classes;
+package implementations;
 
 public class ClientOrder {
 	private int momentArrival;

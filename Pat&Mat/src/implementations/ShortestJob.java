@@ -1,15 +1,15 @@
-package classes;
+package implementations;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FCFS {
+public class ShortestJob {
 	private SLLQueue<ClientOrder> inputQueue;
 	private SLLQueue<ClientOrder> processingQueue;
 	List<ClientOrder> terminatedJobs;
     List<ClientOrder> cancelJobs;
 	
-	public FCFS(){
+	public ShortestJob(){
 		inputQueue = new SLLQueue<ClientOrder>();
 		processingQueue = new SLLQueue<ClientOrder>();
 		terminatedJobs = new ArrayList<ClientOrder>();
@@ -20,7 +20,7 @@ public class FCFS {
 		inputQueue.enqueue(proc);
 	}
 	
-	public void methodFCFS(){
+	public void methodShortestJob(){
 		int timeUnit = 0;
 		while(!inputQueue.isEmpty() || !processingQueue.isEmpty()){
 			int size = processingQueue.size() - 1;
@@ -44,15 +44,19 @@ public class FCFS {
 				
 			}
 			
+			int count = 0;
 			while(!inputQueue.isEmpty() && inputQueue.first().getMomentArrival() == timeUnit){
+				count++;
 				processingQueue.enqueue(inputQueue.dequeue());
-				
 			}
+			
+			if(count > 1)
+				sortJobs(processingQueue);
 			timeUnit++;
 		}
 		
-		System.out.println("Pat's approach profit: $" + computingProfit(terminatedJobs));
-		System.out.println("Pat's approach number of dissapointed customers: " + cancelJobs.size());
+		System.out.println("Pac's approach profit: $" + computingProfit(terminatedJobs));
+		System.out.println("Pac's approach number of dissapointed customers: " + cancelJobs.size());
 	}
 	
 	public double computingProfit(List<ClientOrder> list){
@@ -62,5 +66,28 @@ public class FCFS {
 		}
 		
 		return profit;
+	}
+	
+	public void sortJobs(SLLQueue<ClientOrder> processQueue){
+		int n = processQueue.size();
+		ClientOrder servingFirst = processQueue.dequeue();
+		for(int i = 0; i < n-1; i++){
+			ClientOrder x = processQueue.dequeue();
+			for(int j = 0; j < n - 2; j++){
+				ClientOrder y = processQueue.dequeue();
+				if(x.getTimeOrder() > y.getTimeOrder())
+					processQueue.enqueue(y);
+				else{
+					processQueue.enqueue(x);
+					x=y;
+				}
+			}
+			processQueue.enqueue(x);
+		}
+		
+		processQueue.enqueue(servingFirst);
+		for(int k = 0; k < n-1; k++){
+			processQueue.enqueue(processQueue.dequeue());
+		}
 	}
 }

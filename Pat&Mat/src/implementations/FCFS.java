@@ -1,14 +1,15 @@
-package classes;
+package implementations;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class MaxProfit {
+public class FCFS {
 	private SLLQueue<ClientOrder> inputQueue;
 	private SLLQueue<ClientOrder> processingQueue;
 	List<ClientOrder> terminatedJobs;
     List<ClientOrder> cancelJobs;
 	
-	public MaxProfit(){
+	public FCFS(){
 		inputQueue = new SLLQueue<ClientOrder>();
 		processingQueue = new SLLQueue<ClientOrder>();
 		terminatedJobs = new ArrayList<ClientOrder>();
@@ -19,7 +20,7 @@ public class MaxProfit {
 		inputQueue.enqueue(proc);
 	}
 	
-	public void methodMaxProfit(){
+	public void methodFCFS(){
 		int timeUnit = 0;
 		while(!inputQueue.isEmpty() || !processingQueue.isEmpty()){
 			int size = processingQueue.size() - 1;
@@ -43,19 +44,15 @@ public class MaxProfit {
 				
 			}
 			
-			int count = 0;
 			while(!inputQueue.isEmpty() && inputQueue.first().getMomentArrival() == timeUnit){
-				count++;
 				processingQueue.enqueue(inputQueue.dequeue());
+				
 			}
-			
-			if(count > 1)
-				sortCost(processingQueue);
 			timeUnit++;
 		}
 		
-		System.out.println("Max approach profit: $" + computingProfit(terminatedJobs));
-		System.out.println("Max approach number of dissapointed customers: " + cancelJobs.size());
+		System.out.println("Pat's approach profit: $" + computingProfit(terminatedJobs));
+		System.out.println("Pat's approach number of dissapointed customers: " + cancelJobs.size());
 	}
 	
 	public double computingProfit(List<ClientOrder> list){
@@ -65,28 +62,5 @@ public class MaxProfit {
 		}
 		
 		return profit;
-	}
-	
-	public void sortCost(SLLQueue<ClientOrder> q){
-		int n = q.size();
-		ClientOrder servingFirst = q.dequeue();
-		for(int i = 0; i < n-1; i++){
-			ClientOrder x = q.dequeue();
-			for(int j = 0; j < n - 2; j++){
-				ClientOrder y = q.dequeue();
-				if(x.getCost() <= y.getCost())
-					q.enqueue(y);
-				else{
-					q.enqueue(x);
-					x=y;
-				}
-			}
-			
-			q.enqueue(x);
-		}
-		q.enqueue(servingFirst);
-		for(int k = 0; k < n-1; k++){
-			q.enqueue(q.dequeue());
-		}
 	}
 }

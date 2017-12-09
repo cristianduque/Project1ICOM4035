@@ -1,4 +1,4 @@
-package classes;
+package implementations;
 
 public class Node<E> {
 	private E element; 

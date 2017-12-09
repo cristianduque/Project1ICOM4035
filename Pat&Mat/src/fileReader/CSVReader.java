@@ -1,30 +1,33 @@
 package fileReader;
 
-import classes.ClientOrder;
-import classes.FCFS;
-import classes.LCFS;
-import classes.MaxProfit;
-import classes.ShortestJob;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-
-
+import implementations.ClientOrder;
+import implementations.FCFS;
+import implementations.LCFS;
+import implementations.MaxProfit;
+import implementations.ShortestJob;
 
 /* This class reads data from a Comma-Separated Value file(CSV)
  * to determine the parameters to consider in the restaurant such
- * as moment of arrival, customer id
+ * as moment of arrival, customer identification, time to prepare order,
+ * cost, and level of patience the customer is waiting for the order
+ * 
+ * @author Cristian G. Duque Gonzalez
+ * @author Rafael Cruz Candelario
  */
 
 public class CSVReader {
 	public static void main(String[] args) {
-        String csvFile = "/Users/cristianduquegonzalez/Desktop/Example.csv"; //CAMBIAR
+        String csvFile = "/Users/cristianduquegonzalez/Desktop/Example.csv"; 
         BufferedReader br = null;
         String line = "";
         String csvSplitBy = ",";
+        
+        //Creating the four instances to execute the methods
         FCFS patMethod = new FCFS();
         LCFS matMethod = new LCFS();
         MaxProfit maxMethod = new MaxProfit();
@@ -42,28 +45,25 @@ public class CSVReader {
         			double costOrder = Double.parseDouble(process[3].substring(1));
         			int patience = Integer.parseInt(process[4]);
         			
-        			ClientOrder client1 = new ClientOrder(arTime, custID, timePrep, costOrder, patience);
-        			ClientOrder client2 = new ClientOrder(arTime, custID, timePrep, costOrder, patience);
-        			ClientOrder client3 = new ClientOrder(arTime, custID, timePrep, costOrder, patience);
-        			ClientOrder client4 = new ClientOrder(arTime, custID, timePrep, costOrder, patience);
+        			ClientOrder clientPat = new ClientOrder(arTime, custID, timePrep, costOrder, patience);
+        			ClientOrder clientMat = new ClientOrder(arTime, custID, timePrep, costOrder, patience);
+        			ClientOrder clientMax = new ClientOrder(arTime, custID, timePrep, costOrder, patience);
+        			ClientOrder clientPac = new ClientOrder(arTime, custID, timePrep, costOrder, patience);
 
-
-        			patMethod.fillingInputQueue(client1);
-        			matMethod.fillingInputStack(client2);
-        			maxMethod.fillingInputQueue(client3);
-        			pacMethod.fillingInputQueue(client4);
+        			//FILLING THE INPUT INTO THE LISTS OF EACH MEHTOD
+        			patMethod.fillingInputQueue(clientPat);
+        			matMethod.fillingInputStack(clientMat);
+        			maxMethod.fillingInputQueue(clientMax);
+        			pacMethod.fillingInputQueue(clientPac);
         		
         		}
         		
-        		//METHOD
+        		//METHODS EXECUTING
         		patMethod.methodFCFS();
         		matMethod.methodLCFS(); 
         		maxMethod.methodMaxProfit();
         		pacMethod.methodShortestJob();
         		
-        		
-        		
-            	
         	    
         } catch (FileNotFoundException e) {
         		e.printStackTrace();

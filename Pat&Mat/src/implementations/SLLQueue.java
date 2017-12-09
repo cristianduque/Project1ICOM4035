@@ -1,9 +1,12 @@
-package classes;
+package implementations;
 
+import interfaces.Queue;
 
 /** 
-   A partial implementation of the Queue using a singly linked list with references 
-   to the first and to the last node.
+   This class is a implementation of the Queue using a singly linked list 
+   with references to the first and to the last node, that is to be used 
+   within the First-Come-First-Served (FCFS), Shortest-Job-First, and
+   Max Profit methods that Pat, Max, and Pac want to approach.
 **/
 public class SLLQueue<E> implements Queue<E> {
 

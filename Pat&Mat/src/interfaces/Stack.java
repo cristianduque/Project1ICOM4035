@@ -1,5 +1,6 @@
-package classes;
+package interfaces;
 
+import exceptions.EmptyStackException;
 
 public interface Stack<E> { 
 	   /** Accessor Method. 

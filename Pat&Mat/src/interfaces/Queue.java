@@ -1,4 +1,6 @@
-package classes;
+package interfaces;
+
+import exceptions.EmptyQueueException;
 
 public interface Queue<E> { 
 	   /** Accessor Method. 
